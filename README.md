@@ -4,6 +4,7 @@ Python-based task scripts, for running via [pyinvoke](http://www.pyinvoke.org/).
 
 - [Installation](#installation)
 - [Running](#running)
+  - [Available tasks](#available-tasks)
 - [Environment and dependencies setup](#environment-and-dependencies-setup)
 
 ## Installation
@@ -32,6 +33,13 @@ $ inv -h <task-name>
 To invoke a task:
 ```
 $ inv <task-name>
+```
+
+### Available tasks
+
+```
+  mastodon-login   Logs into Mastodon and creates local credentials files.
+  toot-entry       Posts a toot about the given blog entry.
 ```
 
 ## Environment and dependencies setup

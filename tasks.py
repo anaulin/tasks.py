@@ -17,6 +17,7 @@ RE_TOML_SEPARATOR = r"\+\+\+"
 
 @task
 def mastodon_login(_ctx):
+    """Logs into Mastodon and creates local credentials files."""
     password = getpass.getpass("Enter Mastodon password: ")
     Mastodon.create_app(
         APP_NAME,
