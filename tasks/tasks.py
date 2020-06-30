@@ -20,4 +20,5 @@ def toot_entry(_ctx, entry_file):
         meta['title'], entry.get_url(entry_file), tags
     )
     toot_url = mastodon.toot(content)
-    print("Posted to: {}".format(toot_url))
+    print("Toot posted to: {}".format(toot_url))
+    entry.add_syndication_url(entry_file, toot_url)
