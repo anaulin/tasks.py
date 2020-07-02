@@ -4,15 +4,23 @@ import os
 import re
 import toml
 
-RE_TOML_SEPARATOR = r"\+\+\+"
+TOML_SEPARATOR = "+++"
+
+
+def get_file_as_str(filename):
+    """Returns the content of the filename as a string."""
+    with open(filename, 'r') as file:
+        return file.read()
 
 
 def get_toml_and_content(filename):
     """Returns a tuple with the entry TOML frontmatter and the markdown content."""
-    with open(filename, 'r') as file:
-        file_str = file.read()
-        splits = re.split(RE_TOML_SEPARATOR, file_str)
-        return (toml.loads(splits[1].strip()), splits[2])
+    file_str = get_file_as_str(filename)
+    front_start = file_str.index(TOML_SEPARATOR) + len(TOML_SEPARATOR)
+    frontmatter_end = file_str.index(TOML_SEPARATOR, front_start)
+    toml_str = file_str[front_start:frontmatter_end]
+    content_str = file_str[frontmatter_end + len(TOML_SEPARATOR):]
+    return (toml.loads(toml_str), content_str)
 
 
 def get_toml(filename):

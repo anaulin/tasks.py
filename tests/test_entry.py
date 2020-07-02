@@ -6,6 +6,23 @@ from .context import entry
 
 TEST_ENTRY = os.path.join(os.path.dirname(__file__), "test_entry.md")
 
+TEST_ENTRY_CONTENT = """
+
+Some content.
+
+## A section in the content
+
+Content that looks like frontmatter:
+```
++++
+but this is
+not really frontmatter
++++
+```
+
+More content.
+"""
+
 
 def test_get_toml_and_content():
     (toml, content) = entry.get_toml_and_content(TEST_ENTRY)
@@ -14,7 +31,7 @@ def test_get_toml_and_content():
         'tags': ["books", "stuff"],
         'book': {'title': 'The Sorcerer of the Wildeeps', 'rating': 4}
     }
-    assert content == "\n\nSome content.\n\n## A section in the content\n\nMore content.\n"
+    assert content == TEST_ENTRY_CONTENT
 
 
 def test_get_toml():

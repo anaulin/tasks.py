@@ -11,4 +11,12 @@ Some content.
 
 ## A section in the content
 
+Content that looks like frontmatter:
+```
++++
+but this is
+not really frontmatter
++++
+```
+
 More content.
