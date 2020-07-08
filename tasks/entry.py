@@ -1,7 +1,6 @@
 """Utilities to handle .md blog entry files, manipulate the TOML frontmatter, etc."""
 
 import os
-import re
 import toml
 
 TOML_SEPARATOR = "+++"
