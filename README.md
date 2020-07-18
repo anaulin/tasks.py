@@ -40,6 +40,7 @@ $ inv <task-name>
 ```
   deploy                Deploy blog.
   mastodon-login        Logs into Mastodon and creates local credentials files.
+  send-to-indiewebnews   Sends webmention to news.indieweb.org, adds appropriate syndication URLs.
   send-to-indiewebxyz   Adds appropriate syndication URLs and submits the entry to the chosen indieweb.xyz sub.
   toot-entry            Posts a toot about the given blog entry.
 ```

@@ -43,6 +43,18 @@ def send_to_indiewebxyz(_ctx, entry_file, sub):
     webmention.send(entry.get_url(entry_file), xyz_url)
 
 
+@task(help={
+    'entry_file': "Path to the entry file to syndicate.",
+})
+def send_to_indiewebnews(_ctx, entry_file):
+    """Sends webmention to news.indieweb.org, adds appropriate syndication URLs."""
+    indiewebnews_url = "https://news.indieweb.org/en"
+    entry.add_syndication_url(entry_file, indiewebnews_url)
+    _git_commit_all(_ctx)
+    deploy(_ctx)
+    webmention.send(entry.get_url(entry_file), indiewebnews_url)
+
+
 @task
 def deploy(_ctx):
     """Deploy blog."""
