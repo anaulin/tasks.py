@@ -12,4 +12,7 @@ def send(src, tgt):
 
     Returns the status code of the webmention request.
     """
-    return ronkyuu.sendWebmention(src, tgt)
+    response = ronkyuu.sendWebmention(src, tgt)
+    if not response:
+        print("Error sending mention: {}".format(response.text))
+    return response
