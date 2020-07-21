@@ -1,5 +1,7 @@
 """Main tasks collection. Entrypoint to the shenanigans."""
 
+import datetime
+
 from invoke import run, task
 from . import mastodon
 from . import entry
@@ -59,6 +61,14 @@ def send_to_indiewebnews(_ctx, entry_file):
 def deploy(_ctx):
     """Deploy blog."""
     run("cd {} && make deploy".format(BLOG_DIR))
+
+@task(help={ 'entry_file': "Path to the entry file to publish." })
+def publish(_ctx, entry_file):
+    """Publishes the given entry and deploys it."""
+    entry.add_to_toml(entry_file, { "draft": "false", "date": datetime.datetime.now() })
+    _git_commit_all(_ctx)
+    deploy(_ctx)
+    toot_entry(_ctx, entry_file)
 
 
 def _git_commit_all(_ctx):
