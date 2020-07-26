@@ -38,11 +38,13 @@ $ inv <task-name>
 ### Available tasks
 
 ```
-  deploy                Deploy blog.
-  mastodon-login        Logs into Mastodon and creates local credentials files.
+  deploy                 Deploy blog.
+  mastodon-login         Logs into Mastodon and creates local credentials files.
+  publish                Publishes the given entry and deploys it.
   send-to-indiewebnews   Sends webmention to news.indieweb.org, adds appropriate syndication URLs.
-  send-to-indiewebxyz   Adds appropriate syndication URLs and submits the entry to the chosen indieweb.xyz sub.
-  toot-entry            Posts a toot about the given blog entry.
+  send-to-indiewebxyz    Adds appropriate syndication URLs and submits the entry to the chosen indieweb.xyz sub.
+  start-reading          Start a draft entry about this book.
+  toot-entry             Posts a toot about the given blog entry.
 ```
 
 ## Environment and dependencies setup

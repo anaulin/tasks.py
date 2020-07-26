@@ -62,13 +62,38 @@ def deploy(_ctx):
     """Deploy blog."""
     run("cd {} && make deploy".format(BLOG_DIR))
 
-@task(help={ 'entry_file': "Path to the entry file to publish." })
+
+@task(help={'entry_file': "Path to the entry file to publish."})
 def publish(_ctx, entry_file):
     """Publishes the given entry and deploys it."""
-    entry.add_to_toml(entry_file, { "draft": "false", "date": datetime.datetime.now() })
+    entry.add_to_toml(
+        entry_file, {"draft": "false", "date": datetime.datetime.now()})
     _git_commit_all(_ctx)
     deploy(_ctx)
     toot_entry(_ctx, entry_file)
+
+
+@task(help={'title': "Title of book."})
+def start_reading(_ctx, title):
+    """Start a draft entry about this book."""
+    slug = "book-notes-" + title.replace(' ', '-').lower()
+    run("cd {} && make new slug={}".format(BLOG_DIR, slug))
+    filename = "{}/content/blog/{}.md".format(BLOG_DIR, slug)
+    entry.add_to_toml(filename, {
+        "title": "Book Notes: {}".format(title),
+        "draft": "true",
+        "tags": ["books"],
+        "book": {
+            "title": title,
+            "author": "",
+            "url": "",
+            "start": datetime.date.today(),
+            "end": "",
+            "rating": "",
+            "image": "/img/"
+        },
+    })
+    _git_commit_all(_ctx)
 
 
 def _git_commit_all(_ctx):
