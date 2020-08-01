@@ -58,5 +58,5 @@ def write_toml(filename, new_toml):
     with open(filename, 'w') as outfile:
         outfile.write("+++\n")
         outfile.write(toml.dumps(new_toml))
-        outfile.write("+++\n")
+        outfile.write("+++")
         outfile.write(content)

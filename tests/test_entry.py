@@ -1,3 +1,4 @@
+import filecmp
 import shutil
 import tempfile
 import os
@@ -80,8 +81,10 @@ def test_write_toml():
     with tempfile.NamedTemporaryFile() as temp:
         shutil.copy2(TEST_ENTRY, temp.name)
         entry.write_toml(temp.name, {'new_key': 'new_value'})
-        new_toml = entry.get_toml(temp.name)
+        (new_toml, new_content) = entry.get_toml_and_content(temp.name)
+        (_, old_content) = entry.get_toml_and_content(TEST_ENTRY)
         assert new_toml == {'new_key': 'new_value'}
+        assert new_content == old_content
 
 
 def test_add_syndication_url():
