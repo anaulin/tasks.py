@@ -96,5 +96,12 @@ def start_reading(_ctx, title):
     _git_commit_all(_ctx)
 
 
+CLIPPINGS_PY_DIR="/Users/anaulin/src/github.com/anaulin/clippings.py"
+SOURCE_VENV="source .venv/bin/activate"
+@task
+def extract_clippings(_ctx):
+    """Use the local clippings.py installation to extract clippings from the attached Kindle."""
+    run("cd {} && {} && make".format(CLIPPINGS_PY_DIR, SOURCE_VENV))
+
 def _git_commit_all(_ctx):
     run("cd {} && git add . && git commit -m 'Autocommit from tasks.py' && git push".format(BLOG_DIR))

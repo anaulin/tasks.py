@@ -39,6 +39,7 @@ $ inv <task-name>
 
 ```
   deploy                 Deploy blog.
+  extract-clippings      Use the local clippings.py installation to extract clippings from the attached Kindle.
   mastodon-login         Logs into Mastodon and creates local credentials files.
   publish                Publishes the given entry and deploys it.
   send-to-indiewebnews   Sends webmention to news.indieweb.org, adds appropriate syndication URLs.
