@@ -1,6 +1,7 @@
 """Main tasks collection. Entrypoint to the shenanigans."""
 
 import datetime
+import os
 
 from invoke import run, task
 from . import mastodon
@@ -96,12 +97,42 @@ def start_reading(_ctx, title):
     _git_commit_all(_ctx)
 
 
-CLIPPINGS_PY_DIR="/Users/anaulin/src/github.com/anaulin/clippings.py"
-SOURCE_VENV="source .venv/bin/activate"
+CLIPPINGS_PY_DIR = "/Users/anaulin/src/github.com/anaulin/clippings.py"
+KINDLE_CLIPPINGS = "/Volumes/Kindle/documents/My Clippings.txt"
+BACKUPS_DIR = "/Users/anaulin/Google Drive/backups/"
+
+
 @task
 def extract_clippings(_ctx):
-    """Use the local clippings.py installation to extract clippings from the attached Kindle."""
-    run("cd {} && {} && make".format(CLIPPINGS_PY_DIR, SOURCE_VENV))
+    """
+    Use the local clippings.py installation to extract clippings from the attached Kindle.
+    Includes clearing the Kindle file, making backups.
+    """
+    backup(_ctx, KINDLE_CLIPPINGS)
+    with _ctx.cd(CLIPPINGS_PY_DIR):
+        with _ctx.prefix("source .venv/bin/activate"):
+            backup(_ctx, "clippings.csv")
+            _ctx.run(
+                f"./clippings/clippings.py extract {_escape_filename(KINDLE_CLIPPINGS)}", echo=True)
+    with open(KINDLE_CLIPPINGS, 'w') as clippings_f:
+        clippings_f.truncate(0)
+
+
+@task(help={'origin_file': "Path to file to backup."})
+def backup(_ctx, origin_file):
+    """Copies the origin_file into the backups directory, adding a timestamp suffix to the filename"""
+    timestamp_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")
+    (base_filename, ext) = os.path.splitext(os.path.basename(origin_file))
+    dst_file = os.path.join(
+        BACKUPS_DIR, f"{base_filename}-{timestamp_str}{ext}")
+    _ctx.run(
+        f"cp {_escape_filename(origin_file)} {_escape_filename(dst_file)}", echo=True)
+
+
+def _escape_filename(filename):
+    """Escapes spaces in the given filename, Unix-style."""
+    return filename.replace(" ", "\\ ")
+
 
 def _git_commit_all(_ctx):
     run("cd {} && git add . && git commit -m 'Autocommit from tasks.py' && git push".format(BLOG_DIR))

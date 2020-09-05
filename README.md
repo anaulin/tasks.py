@@ -38,6 +38,12 @@ $ inv <task-name>
 ### Available tasks
 
 ```
+$ inv -l
+
+Available tasks:
+
+  backup                 Copies the origin_file into the backups directory, adding a timestamp suffix to the
+                         filename
   deploy                 Deploy blog.
   extract-clippings      Use the local clippings.py installation to extract clippings from the attached Kindle.
   mastodon-login         Logs into Mastodon and creates local credentials files.
