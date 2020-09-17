@@ -2,6 +2,7 @@
 
 import datetime
 import os
+import sys
 
 from invoke import run, task
 from . import mastodon
@@ -78,8 +79,10 @@ def publish(_ctx, entry_file):
 def start_reading(_ctx, title):
     """Start a draft entry about this book."""
     slug = "book-notes-" + title.replace(' ', '-').lower()
+    print("Slug: ", slug, file=sys.stderr)
     run("cd {} && make new slug={}".format(BLOG_DIR, slug))
     filename = "{}/content/blog/{}.md".format(BLOG_DIR, slug)
+    print("Filename: ", filename, file=sys.stderr)
     entry.add_to_toml(filename, {
         "title": "Book Notes: {}".format(title),
         "draft": "true",
