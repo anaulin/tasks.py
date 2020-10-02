@@ -23,7 +23,8 @@ def mastodon_login(_ctx):
 def toot_entry(_ctx, entry_file):
     """Posts a toot about the given blog entry."""
     meta = entry.get_toml(entry_file)
-    tags = " ".join(["#{}".format(tag) for tag in meta['tags']])
+    tags = " ".join(["#{}".format(tag.replace(" ", "-")) for tag in meta['tags']])
+    tags += " #blog"
     content = "I just published {}: {} \n{}".format(
         meta['title'], entry.get_url(entry_file), tags
     )
