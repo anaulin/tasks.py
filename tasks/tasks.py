@@ -117,7 +117,8 @@ def extract_clippings(_ctx):
         with _ctx.prefix("source .venv/bin/activate"):
             backup(_ctx, "clippings.csv")
             _ctx.run(
-                f"./clippings/clippings.py extract {_escape_filename(KINDLE_CLIPPINGS)}", echo=True)
+                f"./clippings/clippings.py extract {_escape_filename(KINDLE_CLIPPINGS)} --no-title",
+                echo=True)
     with open(KINDLE_CLIPPINGS, 'w') as clippings_f:
         clippings_f.truncate(0)
 
