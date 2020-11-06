@@ -5,3 +5,5 @@ Mastodon.py
 toml
 pytest
 ronkyuu
+python-slugify
+requests

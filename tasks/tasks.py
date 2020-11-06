@@ -8,6 +8,7 @@ from invoke import run, task
 from . import mastodon
 from . import entry
 from . import webmention
+from . import goodreads
 
 
 BLOG_DIR = "/Users/anaulin/src/github.com/anaulin/blog"
@@ -23,7 +24,8 @@ def mastodon_login(_ctx):
 def toot_entry(_ctx, entry_file):
     """Posts a toot about the given blog entry."""
     meta = entry.get_toml(entry_file)
-    tags = " ".join(["#{}".format(tag.replace(" ", "-")) for tag in meta['tags']])
+    tags = " ".join(["#{}".format(tag.replace(" ", "-"))
+                     for tag in meta['tags']])
     tags += " #blog"
     content = "I just published {}: {} \n{}".format(
         meta['title'], entry.get_url(entry_file), tags
@@ -79,11 +81,9 @@ def publish(_ctx, entry_file):
 @task(help={'title': "Title of book."})
 def start_reading(_ctx, title):
     """Start a draft entry about this book."""
-    slug = "book-notes-" + title.replace(' ', '-').lower()
-    print("Slug: ", slug, file=sys.stderr)
+    slug = "book-notes-" + entry.to_slug(title)
     run("cd {} && make new slug={}".format(BLOG_DIR, slug))
     filename = "{}/content/blog/{}.md".format(BLOG_DIR, slug)
-    print("Filename: ", filename, file=sys.stderr)
     entry.add_to_toml(filename, {
         "title": "Book Notes: {}".format(title),
         "draft": "true",
@@ -132,6 +132,12 @@ def backup(_ctx, origin_file):
         BACKUPS_DIR, f"{base_filename}-{timestamp_str}{ext}")
     _ctx.run(
         f"cp {_escape_filename(origin_file)} {_escape_filename(dst_file)}", echo=True)
+
+
+@task(help={'goodreads_csv': "Goodreads CSV to import."})
+def import_goodreads(_ctx, goodreads_csv):
+    """Imports the given Goodreads library export into blog format."""
+    goodreads.import_to_blog(goodreads_csv)
 
 
 def _escape_filename(filename):

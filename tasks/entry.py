@@ -3,6 +3,8 @@
 import os
 import toml
 
+from slugify import slugify
+
 TOML_SEPARATOR = "+++"
 
 
@@ -60,3 +62,8 @@ def write_toml(filename, new_toml):
         outfile.write(toml.dumps(new_toml))
         outfile.write("+++")
         outfile.write(content)
+
+
+def to_slug(title):
+    """Returns a slugified version of the given title"""
+    return slugify(title)

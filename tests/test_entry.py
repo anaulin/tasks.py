@@ -95,3 +95,6 @@ def test_add_syndication_url():
         entry.add_syndication_url(temp.name, "another_url")
         assert entry.get_toml(temp.name)["syndication_urls"] == [
             "new_url", "another_url"]
+
+def test_to_slug():
+    assert entry.to_slug("Some Title: With #1 and Stuff!!") == "some-title-with-1-and-stuff"
