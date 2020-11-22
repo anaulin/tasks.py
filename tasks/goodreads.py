@@ -25,8 +25,11 @@ def _to_blog_entry(row, dst_dir, img_dir, content_dir):
     if "https://anaulin.org" in row["My Review"]:
         return
 
+    if not row["My Review"] or not row["My Review"].strip():
+        return
+
     book_slug = entry.to_slug(row['Title'])
-    date = datetime.strptime(row["Date Read"], '%Y/%m/%d')
+    date = _get_date(row)
     cover_img = _get_cover_for_isbn(
         row['ISBN'], book_slug, f"{dst_dir}{img_dir}")
     meta = {
@@ -52,6 +55,10 @@ def _to_blog_entry(row, dst_dir, img_dir, content_dir):
         outfile.write("+++\n")
         outfile.write(content)
 
+
+def _get_date(row):
+    raw_date = row["Date Read"] if row["Date Read"] else row["Date Added"]
+    return datetime.strptime(raw_date, '%Y/%m/%d')
 
 def _get_cover_for_isbn(mangled_isbn, slug, dst_dir):
     isbn = mangled_isbn.replace('=', '').replace('"', '')
