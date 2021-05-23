@@ -68,14 +68,15 @@ def deploy(_ctx):
     run("cd {} && make deploy".format(BLOG_DIR))
 
 
-@task(help={'entry_file': "Path to the entry file to publish."})
-def publish(_ctx, entry_file):
+@task(optional=['notoot'], help={'entry_file': "Path to the entry file to publish."})
+def publish(_ctx, entry_file, notoot=False):
     """Publishes the given entry and deploys it."""
     entry.add_to_toml(
         entry_file, {"draft": "false", "date": datetime.datetime.now()})
     _git_commit_all(_ctx)
     deploy(_ctx)
-    toot_entry(_ctx, entry_file)
+    if not notoot:
+        toot_entry(_ctx, entry_file)
 
 
 @task(help={'title': "Title of book."})
