@@ -23,7 +23,7 @@ def import_to_blog(goodreads_csv,
 
 
 def import_to_blog_list(goodreads_csv,
-                        dst="/Users/anaulin/src/github.com/anaulin/blog/data/books-new.toml"):
+                        dst="/Users/anaulin/src/github.com/anaulin/blog/data/books.toml"):
     """Imports a GoodReads library export CSV into a Hugo toml list.
     """
     books = []
@@ -36,7 +36,7 @@ def import_to_blog_list(goodreads_csv,
                     "author": row["Author"],
                     "url": f"https://www.goodreads.com/book/show/{row['Book Id']}",
                     "start": "",
-                    "end": row["Date Added"],
+                    "end": datetime.strptime(row["Date Added"], "%Y/%m/%d").strftime("%Y-%m-%d"),
                     "rating": row["My Rating"],
                     "image": "",
                     "notes_url": _url_from_text(row["My Review"])
