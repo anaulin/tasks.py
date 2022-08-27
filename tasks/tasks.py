@@ -141,6 +141,12 @@ def import_goodreads(_ctx, goodreads_csv):
     goodreads.import_to_blog(goodreads_csv)
 
 
+@task(help={'goodreads_csv': "Goodreads CSV to import."})
+def import_goodreads_list(_ctx, goodreads_csv):
+    """Imports the given Goodreads library export into blog list format."""
+    goodreads.import_to_blog_list(goodreads_csv)
+
+
 def _escape_filename(filename):
     """Escapes spaces in the given filename, Unix-style."""
     return filename.replace(" ", "\\ ")

@@ -1,5 +1,6 @@
 """GoodReads-related operations."""
 import csv
+import re
 import requests
 import toml
 
@@ -12,7 +13,7 @@ IMG_SUBDIR = "/static/img/"
 
 
 def import_to_blog(goodreads_csv,
-    dst=DEFAULT_BLOG_DST, img_dir=IMG_SUBDIR, content_dir=CONTENT_SUBDIR):
+                   dst=DEFAULT_BLOG_DST, img_dir=IMG_SUBDIR, content_dir=CONTENT_SUBDIR):
     """Imports a GoodReads library export CSV into Hugo posts with book metadata.
     """
     with open(goodreads_csv) as library:
@@ -20,6 +21,35 @@ def import_to_blog(goodreads_csv,
         for row in reader:
             _to_blog_entry(row, dst, img_dir, content_dir)
 
+
+def import_to_blog_list(goodreads_csv,
+                        dst="/Users/anaulin/src/github.com/anaulin/blog/data/books-new.toml"):
+    """Imports a GoodReads library export CSV into a Hugo toml list.
+    """
+    books = []
+    with open(goodreads_csv) as library:
+        reader = csv.DictReader(library)
+        for row in reader:
+            books.append(
+                {
+                    "title": row["Title"],
+                    "author": row["Author"],
+                    "url": f"https://www.goodreads.com/book/show/{row['Book Id']}",
+                    "start": "",
+                    "end": row["Date Added"],
+                    "rating": row["My Rating"],
+                    "image": "",
+                    "notes_url": _url_from_text(row["My Review"])
+                }
+            )
+    with open(dst, 'w') as outfile:
+        outfile.write(toml.dumps({"books": books}))
+
+def _url_from_text(text):
+    match = re.search(r'(https://anaulin.org/(.*)/)', text)
+    if match is None:
+        return ""
+    return match[1]
 
 def _to_blog_entry(row, dst_dir, img_dir, content_dir):
     if "https://anaulin.org" in row["My Review"]:
@@ -59,6 +89,7 @@ def _to_blog_entry(row, dst_dir, img_dir, content_dir):
 def _get_date(row):
     raw_date = row["Date Read"] if row["Date Read"] else row["Date Added"]
     return datetime.strptime(raw_date, '%Y/%m/%d')
+
 
 def _get_cover_for_isbn(mangled_isbn, slug, dst_dir):
     isbn = mangled_isbn.replace('=', '').replace('"', '')
