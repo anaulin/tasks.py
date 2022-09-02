@@ -82,23 +82,17 @@ def publish(_ctx, entry_file, notoot=False):
 @task(help={'title': "Title of book."})
 def start_reading(_ctx, title):
     """Start a draft entry about this book."""
-    slug = "book-notes-" + entry.to_slug(title)
-    run("cd {} && make new slug={}".format(BLOG_DIR, slug))
-    filename = "{}/content/blog/{}.md".format(BLOG_DIR, slug)
-    entry.add_to_toml(filename, {
-        "title": "Book Notes: {}".format(title),
-        "draft": "true",
-        "tags": ["books"],
-        "book": {
+    entry.add_to_books_toml(
+        {
             "title": title,
             "author": "",
             "url": "",
-            "start": datetime.date.today(),
+            "start": "{}".format(datetime.date.today()),
             "end": "",
             "rating": "",
             "image": "/img/"
-        },
-    })
+        }
+    )
     _git_commit_all(_ctx)
 
 

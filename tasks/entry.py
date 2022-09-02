@@ -7,7 +7,6 @@ from slugify import slugify
 
 TOML_SEPARATOR = "+++"
 
-
 def get_file_as_str(filename):
     """Returns the content of the filename as a string."""
     with open(filename, 'r') as file:
@@ -43,6 +42,13 @@ def add_syndication_url(filename, url):
         add_to_toml(filename, {"syndication_urls": new_urls})
     else:
         add_to_toml(filename, {'syndication_urls': [url]})
+
+
+def add_to_books_toml(new_book, filename = "/Users/anaulin/src/github.com/anaulin/blog/data/books.toml"):
+    existing_toml = toml.loads(get_file_as_str((filename)))
+    existing_toml["books"].insert(0, new_book)
+    with open(filename, 'w') as outfile:
+        outfile.write(toml.dumps(existing_toml))
 
 
 def add_to_toml(filename, toml_to_add):
