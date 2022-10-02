@@ -90,7 +90,7 @@ def start_reading(_ctx, title):
             "start": "{}".format(datetime.date.today()),
             "end": "",
             "rating": "",
-            "image": "/img/"
+            "image": ""
         }
     )
     _git_commit_all(_ctx)
