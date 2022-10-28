@@ -7,3 +7,4 @@ pytest
 ronkyuu
 python-slugify
 requests
+beautifulsoup4
